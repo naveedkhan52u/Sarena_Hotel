@@ -40,9 +40,10 @@ async function submitBooking(form) {
 
   if (!checkInDate || !checkOutDate || nights < 1) throw new Error('Please choose a valid check-in and check-out date.');
 
-  return supabaseRequest('bookings', {
-    method: 'POST',
-    body: JSON.stringify({
+  const nightlyRate = Number(room.price_per_night) || 0;
+  const { data, error } = await supabase
+    .from('bookings')
+    .insert({
       room_id: room.id,
       guest_name: field(form, 'input[placeholder="Your name"]'),
       guest_email: field(form, 'input[type="email"]'),
@@ -50,14 +51,19 @@ async function submitBooking(form) {
       guests,
       check_in: checkInDate,
       check_out: checkOutDate,
-      price_per_night: Number(room.price_per_night) || 0,
-      subtotal: (Number(room.price_per_night) || 0) * nights,
-      total_amount: (Number(room.price_per_night) || 0) * nights,
+      nights,
+      price_per_night: nightlyRate,
+      subtotal: nightlyRate * nights,
+      total_amount: nightlyRate * nights,
       special_requests: field(form, 'textarea'),
-      booking_status: 'pending',
+      status: 'pending',
       payment_status: 'unpaid',
-    }),
-  });
+    })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message || 'Unable to create the booking.');
+  return data;
 }
 
 async function submitContact(form) {
