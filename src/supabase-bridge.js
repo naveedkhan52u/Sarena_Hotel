@@ -51,7 +51,6 @@ async function submitBooking(form) {
       guests,
       check_in: checkInDate,
       check_out: checkOutDate,
-      nights,
       price_per_night: nightlyRate,
       subtotal: nightlyRate * nights,
       total_amount: nightlyRate * nights,
