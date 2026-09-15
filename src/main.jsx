@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { createRoot } from 'react-dom/client';
-import {
-  Menu, X, ArrowRight, MapPin, Phone, Mail, CalendarDays, Wifi, Coffee,
-  Car, Utensils, Sparkles, ChevronRight, Clock, ShieldCheck, Users,
-  BedDouble, ConciergeBell, CheckCircle2
-} from 'lucide-react';
+import { Facebook, Instagram, Youtube, ArrowRight, Check, MapPin, Phone, Mail, CalendarDays, Users, Menu, X, Star, BedDouble, UtensilsCrossed, Car, Sparkles, Clock3, ShieldCheck } from 'lucide-react';
 import './styles.css';
 
-const rooms = [
-  { name: 'Deluxe King Room', price: 'PKR 18,500', image: 'https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1000&q=85', text: 'A calm, spacious retreat with a king bed and refined details.' },
-  { name: 'Executive Suite', price: 'PKR 27,500', image: 'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=85', text: 'Extra space, a separate sitting area and a polished stay experience.' },
-  { name: 'Family Room', price: 'PKR 23,000', image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1000&q=85', text: 'Comfortable accommodation designed for families and longer stays.' }
+const navItems = [
+  ['/', 'Home'],
+  ['/about', 'About'],
+  ['/rooms', 'Rooms'],
+  ['/services', 'Services'],
+  ['/gallery', 'Gallery'],
+  ['/contact', 'Contact'],
 ];
 
-const services = [
-  ['Restaurant & Dining', Utensils, 'Freshly prepared meals and a relaxed dining experience.'],
-  ['High-Speed Wi-Fi', Wifi, 'Reliable connectivity throughout the property.'],
-  ['Airport Transfer', Car, 'Comfortable private transfers arranged around your schedule.'],
-  ['Daily Housekeeping', Sparkles, 'Thoughtful daily service so your room stays effortless.'],
-  ['Front Desk Assistance', ConciergeBell, 'Helpful assistance for check-in, local information and guest requests.'],
-  ['Comfort & Security', ShieldCheck, 'A clean, welcoming environment with guest comfort and privacy in mind.']
-];
-
-const serviceDetails = [
-  { title: 'Accommodation', icon: BedDouble, text: 'Choose from thoughtfully arranged rooms and suites for couples, families, business travellers and longer stays. Each room is designed around a simple idea: a quiet place to rest after a day of travel.', points: ['Comfortable sleeping spaces', 'Private guest accommodation', 'Regular housekeeping', 'Room assistance on request'] },
-  { title: 'Dining', icon: Utensils, text: 'Enjoy convenient dining without having to leave the property. Our hospitality approach focuses on fresh food, a comfortable setting and service that respects your time.', points: ['Breakfast and meal options', 'Comfortable dining area', 'Guest dining assistance', 'Flexible service for groups'] },
-  { title: 'Transfers & Transport', icon: Car, text: 'Travel days are easier when transport is arranged clearly. Ask our team about airport transfers, local transport and other travel requirements.', points: ['Airport transfer assistance', 'Local transport coordination', 'Arrival and departure planning', 'Travel information support'] },
-  { title: 'Guest Support', icon: ConciergeBell, text: 'Our team is available to help with practical requests during your stay, from local information to room-related assistance.', points: ['Front desk assistance', 'Local information', 'Special requests', 'Stay planning support'] }
+const socialLinks = [
+  { label: 'Facebook', href: 'https://www.facebook.com/', icon: Facebook },
+  { label: 'Instagram', href: 'https://www.instagram.com/', icon: Instagram },
+  { label: 'YouTube', href: 'https://www.youtube.com/', icon: Youtube },
 ];
 
 function navigate(path) {
@@ -36,105 +24,108 @@ function navigate(path) {
 }
 
 function Header({ onBook }) {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const go = (path) => { setMenuOpen(false); navigate(path); };
-  return <header className="header">
-    <div className="container nav">
-      <button className="brand" onClick={() => go('/')} aria-label="Sarena Hotel home">
-        <span className="brand-mark">S</span><span><strong>SARENA</strong><small>HOTEL</small></span>
-      </button>
-      <nav className={menuOpen ? 'nav-links open' : 'nav-links'}>
-        <button onClick={() => go('/')}>Home</button>
-        <button onClick={() => go('/about')}>About</button>
-        <button onClick={() => go('/rooms')}>Rooms</button>
-        <button onClick={() => go('/services')}>Services</button>
-        <button onClick={() => go('/gallery')}>Gallery</button>
-        <button onClick={() => go('/contact')}>Contact</button>
-        <button className="nav-book" onClick={onBook}>Book a Stay</button>
-      </nav>
-      <button className="menu-btn" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X /> : <Menu />}</button>
-    </div>
-  </header>;
+  const [open, setOpen] = useState(false);
+  return (
+    <header className="site-header">
+      <div className="container header-inner">
+        <button className="brand" onClick={() => navigate('/')} aria-label="Sarena Hotel home">
+          <span className="brand-mark">S</span>
+          <span><strong>Sarena</strong><small>HOTEL</small></span>
+        </button>
+        <nav className={open ? 'main-nav open' : 'main-nav'}>
+          {navItems.map(([path, label]) => (
+            <button key={path} onClick={() => { navigate(path); setOpen(false); }}>{label}</button>
+          ))}
+          <button className="nav-book" onClick={() => { onBook(); setOpen(false); }}>Book a Stay</button>
+        </nav>
+        <button className="menu-button" onClick={() => setOpen(!open)} aria-label="Toggle menu">
+          {open ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+    </header>
+  );
 }
 
 function Footer() {
-  return <footer><div className="container footer">
-    <div><div className="footer-brand">SARENA HOTEL</div><p>A considered stay in the heart of Gilgit-Baltistan.</p></div>
-    <div className="footer-links"><button onClick={() => navigate('/about')}>About</button><button onClick={() => navigate('/services')}>Services</button><button onClick={() => navigate('/contact')}>Contact</button><span>© 2026 Sarena Hotel</span></div>
-  </div></footer>;
+  return (
+    <footer className="site-footer">
+      <div className="container footer-grid">
+        <div>
+          <div className="footer-brand"><span className="brand-mark">S</span><span><strong>Sarena</strong><small>HOTEL</small></span></div>
+          <p>A calm, comfortable stay in the heart of Gilgit-Baltistan, designed around thoughtful hospitality and genuine guest care.</p>
+          <div className="social-links" aria-label="Social media links">
+            {socialLinks.map(({ label, href, icon: Icon }) => (
+              <a key={label} href={href} target="_blank" rel="noreferrer" aria-label={label} title={label}>
+                <Icon size={19} />
+              </a>
+            ))}
+          </div>
+        </div>
+        <div><h4>Explore</h4>{navItems.slice(1).map(([path, label]) => <button className="footer-link" key={path} onClick={() => navigate(path)}>{label}</button>)}</div>
+        <div><h4>Contact</h4><p><MapPin size={15} /> Gilgit-Baltistan, Pakistan</p><p><Phone size={15} /> +92 300 0000000</p><p><Mail size={15} /> stay@sarenahotel.com</p></div>
+      </div>
+      <div className="container footer-bottom"><span>© 2026 Sarena Hotel. All rights reserved.</span><span>Comfort · Care · Hospitality</span></div>
+    </footer>
+  );
 }
 
-function BookingModal({ onClose }) {
+function BookingModal({ close }) {
   const [submitted, setSubmitted] = useState(false);
   const submit = (e) => { e.preventDefault(); setSubmitted(true); };
-  return <div className="modal-backdrop" onClick={onClose}><div className="booking-modal" onClick={e => e.stopPropagation()}>
-    <button className="modal-close" onClick={onClose}><X /></button>
-    {!submitted ? <><p className="eyebrow">RESERVE YOUR STAY</p><h2>Book a <em>room.</em></h2><p className="muted">Send your preferred dates and room. Our team can confirm availability and final rates.</p>
-      <form onSubmit={submit}>
-        <label>Full name<input required placeholder="Your name" /></label>
-        <div className="form-row"><label>Email<input required type="email" placeholder="you@example.com" /></label><label>Phone<input required type="tel" placeholder="+92" /></label></div>
-        <div className="form-row"><label>Check-in<input required type="date" /></label><label>Check-out<input required type="date" /></label></div>
-        <label>Room<select><option>Deluxe King Room</option><option>Executive Suite</option><option>Family Room</option></select></label>
-        <label>Guests<select><option>1 Guest</option><option>2 Guests</option><option>3 Guests</option><option>4 Guests</option></select></label>
-        <label>Message<textarea rows="3" placeholder="Any special request?" /></label>
-        <button className="primary full" type="submit">Send booking enquiry <ArrowRight size={17}/></button>
-      </form></> : <SuccessMessage title="Enquiry received" text="Thank you. Your booking enquiry has been recorded on this page. Connect the form to your hotel email or booking backend before going live." />}
-  </div></div>;
+  return <div className="modal-backdrop" onMouseDown={close}>
+    <div className="booking-modal" onMouseDown={e => e.stopPropagation()}>
+      <button className="modal-close" onClick={close}><X size={20} /></button>
+      {!submitted ? <><span className="eyebrow">RESERVATION</span><h2>Plan your stay</h2><p>Tell us a little about your visit and our team will confirm the details.</p>
+        <form className="booking-form" onSubmit={submit}>
+          <label>Full name<input required placeholder="Your name" /></label><label>Email<input required type="email" placeholder="you@example.com" /></label>
+          <label>Phone<input required placeholder="+92 ..." /></label><label>Guests<input required type="number" min="1" defaultValue="2" /></label>
+          <label>Check-in<input required type="date" /></label><label>Check-out<input required type="date" /></label>
+          <label className="full">Room preference<select><option>Deluxe Room</option><option>Executive Room</option><option>Family Suite</option></select></label>
+          <label className="full">Message<textarea rows="3" placeholder="Any special request?"></textarea></label>
+          <button className="primary-button full" type="submit">Send Booking Request <ArrowRight size={17} /></button>
+        </form></> : <SuccessMessage title="Request received" text="Thank you. Your booking request has been recorded for confirmation." />}
+    </div>
+  </div>;
 }
 
-function SuccessMessage({ title, text }) { return <div className="success-message"><CheckCircle2 size={48}/><h2>{title}</h2><p>{text}</p><button className="primary" onClick={() => window.location.reload()}>Close</button></div>; }
+function SuccessMessage({ title, text }) { return <div className="success-box"><span className="success-icon"><Check size={25} /></span><h3>{title}</h3><p>{text}</p></div>; }
 
 function Home({ onBook }) {
   return <>
-    <section className="hero"><div className="hero-overlay" /><div className="container hero-content"><p className="eyebrow light">WELCOME TO SARENA HOTEL</p><h1>Stay somewhere<br /><em>worth remembering.</em></h1><p className="hero-copy">Comfortable rooms, thoughtful service and a quiet sense of place. Everything you need for a better stay.</p><div className="hero-actions"><button className="primary" onClick={onBook}>Reserve your room <ArrowRight size={18}/></button><button className="text-btn" onClick={() => navigate('/rooms')}>Explore rooms <ChevronRight size={18}/></button></div></div><div className="hero-scroll">SCROLL TO EXPLORE <span /></div></section>
-    <section className="booking-bar"><div className="container booking-inner"><div><span>CHECK IN</span><strong>Choose date</strong></div><CalendarDays size={20}/><div><span>CHECK OUT</span><strong>Choose date</strong></div><CalendarDays size={20}/><div><span>GUESTS</span><strong>2 Guests</strong></div><button onClick={onBook}>Check availability <ArrowRight size={17}/></button></div></section>
-    <section className="section about"><div className="container two-col"><div><p className="eyebrow">A QUIET KIND OF LUXURY</p><h2>Hospitality that feels <em>personal.</em></h2></div><div><p className="lead">Sarena Hotel is designed for guests who value comfort without unnecessary fuss. From the first welcome to the last coffee, every detail is considered.</p><p>Whether you are travelling for business, exploring the region or simply taking a few days away, our goal is simple: make your stay feel easy.</p><button className="outline" onClick={() => navigate('/about')}>Discover Sarena <ArrowRight size={17}/></button></div></div></section>
-    <section className="section rooms-section"><div className="container"><div className="section-heading"><div><p className="eyebrow">OUR ROOMS</p><h2>Designed for <em>rest.</em></h2></div><p>Simple, elegant spaces with everything you need and nothing you don't.</p></div><div className="room-grid">{rooms.map(room => <article className="room-card" key={room.name}><img src={room.image} alt={room.name}/><div className="room-info"><div><h3>{room.name}</h3><p>{room.text}</p></div><strong>{room.price}<small> / night</small></strong><button onClick={onBook}>View & book <ArrowRight size={16}/></button></div></article>)}</div></div></section>
-    <section className="section services"><div className="container"><div className="center-heading"><p className="eyebrow">THE SARENA EXPERIENCE</p><h2>Everything you need, <em>close at hand.</em></h2></div><div className="service-grid">{services.slice(0,4).map(([name, Icon, text]) => <div className="service" key={name}><Icon size={25}/><h3>{name}</h3><p>{text}</p></div>)}</div><div className="center-action"><button className="outline" onClick={() => navigate('/services')}>View all services <ArrowRight size={17}/></button></div></div></section>
-    <GalleryPreview />
-    <ContactPreview />
+    <section className="hero home-hero"><div className="container hero-content"><span className="eyebrow">WELCOME TO SARENA HOTEL</span><h1>Stay close to the beauty of <em>Gilgit-Baltistan.</em></h1><p>A warm, refined place to rest, recharge, and experience the region with comfort at the center.</p><div className="hero-actions"><button className="primary-button" onClick={onBook}>Book your stay <ArrowRight size={17} /></button><button className="text-button" onClick={() => navigate('/rooms')}>Explore rooms <ArrowRight size={16} /></button></div></div></section>
+    <section className="intro section"><div className="container split-grid"><div><span className="eyebrow">A BETTER KIND OF STAY</span><h2>Comfort that feels <em>natural.</em></h2></div><div><p className="lead">From the first welcome to the final goodbye, every detail is designed to make your stay easy, restful, and memorable.</p><button className="text-button" onClick={() => navigate('/about')}>Our story <ArrowRight size={16} /></button></div></div></section>
+    <section className="feature-strip"><div className="container feature-grid"><Feature icon={<BedDouble />} title="Comfortable rooms" text="Thoughtfully arranged spaces for restful nights." /><Feature icon={<UtensilsCrossed />} title="Dining" text="Simple, satisfying options for your day." /><Feature icon={<Car />} title="Local assistance" text="Helpful support for getting around the region." /></div></section>
+    <section className="section"><div className="container section-heading"><div><span className="eyebrow">OUR ROOMS</span><h2>Rest well. Wake up <em>ready.</em></h2></div><button className="text-button" onClick={() => navigate('/rooms')}>View all rooms <ArrowRight size={16} /></button></div><div className="container room-cards"><RoomCard title="Deluxe Room" text="A quiet, polished room for couples and solo travelers." image="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1000&q=80" /><RoomCard title="Executive Room" text="More space and comfort for longer stays and business travel." image="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80" /><RoomCard title="Family Suite" text="Room to settle in comfortably when traveling together." image="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1000&q=80" /></div></section>
   </>;
 }
+function Feature({ icon, title, text }) { return <div className="feature"><span className="feature-icon">{icon}</span><div><h3>{title}</h3><p>{text}</p></div></div>; }
+function RoomCard({ title, text, image }) { return <article className="room-card"><img src={image} alt={title} /><div><span className="eyebrow">SARENA HOTEL</span><h3>{title}</h3><p>{text}</p><button className="text-button" onClick={() => navigate('/rooms')}>View room <ArrowRight size={15} /></button></div></article>; }
 
-function GalleryPreview() { return <section className="gallery-section"><div className="gallery-grid"><img className="gallery-large" src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85" alt="Hotel exterior"/><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=85" alt="Hotel room"/><img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=85" alt="Hotel pool"/><div className="gallery-note"><p className="eyebrow light">A GLIMPSE INSIDE</p><h2>Spaces made to <em>slow down.</em></h2><button className="text-btn light-btn" onClick={() => navigate('/gallery')}>View gallery <ArrowRight size={17}/></button></div></div></section>; }
-function ContactPreview() { return <section className="section contact"><div className="container contact-grid"><div><p className="eyebrow">FIND US</p><h2>Come stay <em>with us.</em></h2><p className="lead">Our team is ready to help you plan a comfortable stay.</p><div className="contact-item"><MapPin size={20}/><span>Hotel Road, Gilgit-Baltistan, Pakistan</span></div><div className="contact-item"><Phone size={20}/><span>+92 300 0000000</span></div><div className="contact-item"><Mail size={20}/><span>stay@sarenahotel.com</span></div><button className="outline" onClick={() => navigate('/contact')}>Contact the hotel <ArrowRight size={17}/></button></div><div className="map"><iframe title="Sarena Hotel location map" src="https://www.google.com/maps?q=Gilgit%20Baltistan%20Pakistan&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade"/><div className="map-label"><MapPin size={18}/> Sarena Hotel</div></div></div></section>; }
+function InnerHero({ eyebrow, title, text }) { return <section className="inner-hero"><div className="container"><span className="eyebrow">{eyebrow}</span><h1>{title}</h1><p>{text}</p></div></section>; }
 
-function InnerHero({ eyebrow, title, text }) { return <section className="inner-hero"><div className="container"><p className="eyebrow light">{eyebrow}</p><h1>{title}</h1><p>{text}</p></div></section>; }
-
-function AboutPage() { return <>
-  <InnerHero eyebrow="ABOUT SARENA HOTEL" title={<>A welcoming place to <em>stay.</em></>} text="Thoughtful hospitality, comfortable accommodation and a genuine connection to Gilgit-Baltistan." />
-  <section className="section"><div className="container two-col detailed-copy"><div><p className="eyebrow">OUR STORY</p><h2>Hospitality built around <em>people.</em></h2></div><div><p className="lead">Sarena Hotel is built around a straightforward promise: give every guest a clean, comfortable and welcoming place to stay.</p><p>We understand that a hotel is more than a room. It is the first place you return to after a long journey, the quiet space between meetings, the base for exploring a new destination and sometimes the setting for an important family trip.</p><p>Our approach is practical and personal. We focus on comfortable accommodation, responsive guest service, convenient facilities and clear communication from enquiry to checkout.</p></div></div></section>
-  <section className="section soft-section"><div className="container story-grid"><div><h3>Comfort without unnecessary fuss</h3><p>Every part of the guest experience is designed to feel simple. From room selection and booking enquiries to everyday service, we aim to remove friction and let you concentrate on your trip.</p></div><div><h3>Connected to the region</h3><p>Gilgit-Baltistan offers remarkable landscapes, communities and travel experiences. Sarena Hotel gives guests a comfortable base from which to experience the region while still having a dependable place to return to.</p></div><div><h3>Service with attention</h3><p>Good hospitality is often made up of small things: a clear answer, a clean room, a timely request and a team that listens. Those details matter here.</p></div></div></section>
-  <section className="section values-section"><div className="container"><div className="center-heading"><p className="eyebrow">WHAT MATTERS TO US</p><h2>Simple standards. <em>Real care.</em></h2></div><div className="value-grid"><div><ShieldCheck size={25}/><h3>Trust & privacy</h3><p>Guest information should be handled responsibly and accommodation details should be communicated clearly.</p></div><div><Sparkles size={25}/><h3>Cleanliness</h3><p>A comfortable stay begins with clean, well-presented spaces and consistent housekeeping.</p></div><div><Users size={25}/><h3>Personal service</h3><p>We treat questions and requests as part of the stay, not as an interruption to it.</p></div></div></div></section>
-</>; }
-
-function ServicesPage() { return <>
-  <InnerHero eyebrow="HOTEL SERVICES" title={<>More than a room. <em>A complete stay.</em></>} text="Practical services designed to make your visit more comfortable, connected and convenient." />
-  <section className="section"><div className="container"><div className="center-heading"><p className="eyebrow">OUR SERVICES</p><h2>Everything you need <em>under one roof.</em></h2><p>Service availability can vary by date and booking. Contact the hotel for current details.</p></div><div className="detailed-service-grid">{serviceDetails.map(({title, icon: Icon, text, points}) => <article className="detailed-service" key={title}><div className="service-icon"><Icon size={27}/></div><h3>{title}</h3><p>{text}</p><ul>{points.map(point => <li key={point}><CheckCircle2 size={16}/>{point}</li>)}</ul></article>)}</div></div></section>
-  <section className="section soft-section"><div className="container two-col"><div><p className="eyebrow">SPECIAL REQUESTS</p><h2>Planning something <em>specific?</em></h2></div><div><p className="lead">Tell us what you need before arrival. For families, groups, business travellers or special occasions, advance communication helps us prepare a smoother stay.</p><button className="primary" onClick={() => navigate('/contact')}>Send an enquiry <ArrowRight size={17}/></button></div></div></section>
-</>; }
-
-function RoomsPage({ onBook }) { return <><InnerHero eyebrow="ROOMS & SUITES" title={<>Your space to <em>unwind.</em></>} text="Choose a room that fits the way you travel, from comfortable stays to extra space for families and longer visits." /><section className="section"><div className="container room-grid">{rooms.map(room => <article className="room-card" key={room.name}><img src={room.image} alt={room.name}/><div className="room-info"><div><h3>{room.name}</h3><p>{room.text}</p></div><strong>{room.price}<small> / night</small></strong><button onClick={onBook}>Enquire & book <ArrowRight size={16}/></button></div></article>)}</div></section></>; }
-
-function GalleryPage() { return <><InnerHero eyebrow="GALLERY" title={<>A glimpse of <em>Sarena.</em></>} text="Explore the spaces, atmosphere and details that shape the guest experience." /><section className="section"><div className="container gallery-page-grid"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85" alt="Hotel exterior"/><img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=900&q=85" alt="Hotel room"/><img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=900&q=85" alt="Hotel pool"/><img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=900&q=85" alt="Hotel lounge"/></div></section></>; }
-
-function ContactPage() {
-  const [submitted, setSubmitted] = useState(false);
-  const submit = (e) => { e.preventDefault(); setSubmitted(true); };
-  return <><InnerHero eyebrow="CONTACT SARENA HOTEL" title={<>Let's plan your <em>stay.</em></>} text="Send us your question, booking request or special requirement. Our team can respond with the information you need." />
-    <section className="section"><div className="container contact-page-grid"><div className="contact-details"><p className="eyebrow">GET IN TOUCH</p><h2>We are here to <em>help.</em></h2><p className="lead">For reservations, room availability, transport assistance or general questions, use the enquiry form or contact the hotel directly.</p><div className="contact-item"><MapPin size={20}/><span><strong>Address</strong>Hotel Road, Gilgit-Baltistan, Pakistan</span></div><div className="contact-item"><Phone size={20}/><span><strong>Phone</strong>+92 300 0000000</span></div><div className="contact-item"><Mail size={20}/><span><strong>Email</strong>stay@sarenahotel.com</span></div><div className="contact-item"><Clock size={20}/><span><strong>Guest assistance</strong>Available for enquiries and stay-related requests.</span></div></div>
-      <div className="form-card">{!submitted ? <><p className="eyebrow">SEND AN ENQUIRY</p><h3>Tell us what you need.</h3><form onSubmit={submit}><div className="form-row"><label>Full name<input required placeholder="Your full name" /></label><label>Email<input required type="email" placeholder="you@example.com" /></label></div><div className="form-row"><label>Phone<input required type="tel" placeholder="+92" /></label><label>Subject<select><option>General enquiry</option><option>Room booking</option><option>Group booking</option><option>Transport</option><option>Special request</option></select></label></div><label>Message<textarea required rows="6" placeholder="Write your message here..." /></label><button className="primary full" type="submit">Submit enquiry <ArrowRight size={17}/></button></form></> : <SuccessMessage title="Message received" text="Thank you for contacting Sarena Hotel. The form has been submitted successfully on this website." />}</div></div></section>
-    <section className="section map-section"><div className="container"><div className="map large-map"><iframe title="Sarena Hotel location map" src="https://www.google.com/maps?q=Gilgit%20Baltistan%20Pakistan&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade"/><div className="map-label"><MapPin size={18}/> Sarena Hotel</div></div></div></section>
+function AboutPage() {
+  return <><InnerHero eyebrow="OUR STORY" title={<>A hotel built around <em>hospitality.</em></>} text="A thoughtful place to stay while discovering the landscapes, communities, and character of Gilgit-Baltistan." />
+    <section className="section"><div className="container story-grid"><div className="story-image-wrap"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=85" alt="Sarena Hotel story and hospitality" /><span className="image-note">OUR STORY</span></div><div><span className="eyebrow">THE BEGINNING</span><h2>Made for guests who value <em>peace of mind.</em></h2><p className="lead">Sarena Hotel was imagined as more than a room for the night. It is a welcoming base for people visiting Gilgit-Baltistan for work, family, adventure, or simply a change of scenery.</p><p>Our approach is straightforward: keep the rooms comfortable, the spaces clean, the service attentive, and the experience personal. We believe good hospitality is often found in the small things, from a helpful recommendation to a quiet room after a long day.</p><p>As our hotel grows, the goal remains the same: give every guest a dependable place to rest and a team that treats their stay with genuine care.</p></div></div></section>
+    <section className="soft-section"><div className="container"><div className="section-heading centered"><div><span className="eyebrow">WHAT WE VALUE</span><h2>Simple standards. <em>Consistent care.</em></h2></div></div><div className="values-grid"><Value icon={<ShieldCheck />} title="Trust" text="Clear communication, honest service, and respect for every guest." /><Value icon={<Sparkles />} title="Cleanliness" text="Well-kept spaces and attention to the details that matter." /><Value icon={<Clock3 />} title="Responsiveness" text="A helpful team that takes guest requests seriously." /></div></div></section>
   </>;
 }
+function Value({ icon, title, text }) { return <div className="value-card"><span>{icon}</span><h3>{title}</h3><p>{text}</p></div>; }
 
-function App() {
-  const [path, setPath] = useState(window.location.pathname.replace(/\/$/, '') || '/');
-  const [bookingOpen, setBookingOpen] = useState(false);
-  useEffect(() => { const handler = () => setPath(window.location.pathname.replace(/\/$/, '') || '/'); window.addEventListener('popstate', handler); return () => window.removeEventListener('popstate', handler); }, []);
-  useEffect(() => { document.title = path === '/about' ? 'About | Sarena Hotel' : path === '/services' ? 'Services | Sarena Hotel' : path === '/contact' ? 'Contact | Sarena Hotel' : path === '/rooms' ? 'Rooms | Sarena Hotel' : path === '/gallery' ? 'Gallery | Sarena Hotel' : 'Sarena Hotel | Comfortable stays in Gilgit-Baltistan'; }, [path]);
-  const content = path === '/about' ? <AboutPage /> : path === '/services' ? <ServicesPage /> : path === '/contact' ? <ContactPage /> : path === '/rooms' ? <RoomsPage onBook={() => setBookingOpen(true)} /> : path === '/gallery' ? <GalleryPage /> : <Home onBook={() => setBookingOpen(true)} />;
-  return <div className="site"><Header onBook={() => setBookingOpen(true)} /><main>{content}</main><Footer />{bookingOpen && <BookingModal onClose={() => setBookingOpen(false)} />}</div>;
+function ServicesPage() {
+  return <><InnerHero eyebrow="SERVICES" title={<>Everything you need <em>under one roof.</em></>} text="Useful services, warm hospitality, and practical support to make your stay easier from arrival to departure." />
+    <section className="section"><div className="container section-heading"><div><span className="eyebrow">HOTEL SERVICES</span><h2>Designed around <em>your stay.</em></h2></div></div><div className="container services-grid"><Service icon={<BedDouble />} title="Comfortable Accommodation" text="Well-appointed rooms with the essentials you need for a restful stay." /><Service icon={<UtensilsCrossed />} title="Dining" text="Convenient dining options and thoughtful service throughout your visit." /><Service icon={<Car />} title="Transport Assistance" text="Practical help with local transport, pickups, and getting around." /><Service icon={<MapPin />} title="Local Guidance" text="Useful recommendations for nearby places, experiences, and local attractions." /><Service icon={<Clock3 />} title="Guest Support" text="Responsive assistance for requests before, during, and after your stay." /><Service icon={<Sparkles />} title="Housekeeping" text="Clean, comfortable spaces maintained with care and consistency." /></div></section>
+    <section className="soft-section special-section"><div className="container special-grid"><div><span className="eyebrow">SPECIAL REQUESTS</span><h2>Planning something <em>specific?</em></h2><p>Tell us what you need. Whether it is a celebration, an early arrival, local transport, or another practical request, our team will do its best to help arrange it.</p><button className="primary-button" onClick={() => navigate('/contact')}>Contact the hotel <ArrowRight size={17} /></button></div><div className="special-image-wrap"><img src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1200&q=85" alt="Hotel team preparing a special guest request" /></div></div></section>
+  </>;
 }
+function Service({ icon, title, text }) { return <article className="service-card"><span className="service-icon">{icon}</span><h3>{title}</h3><p>{text}</p><button className="text-button" onClick={() => navigate('/contact')}>Ask about this <ArrowRight size={15} /></button></article>; }
 
-createRoot(document.getElementById('root')).render(<App />);
+function RoomsPage() { return <><InnerHero eyebrow="ROOMS" title={<>A comfortable place to <em>switch off.</em></>} text="Choose a room that fits the way you travel, with comfort, calm, and practical details in mind." /><section className="section"><div className="container room-list"><RoomDetail title="Deluxe Room" image="https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1200&q=85" text="A refined, peaceful room for couples and solo travelers." /><RoomDetail title="Executive Room" image="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=85" text="A spacious option for longer stays and business travel." /><RoomDetail title="Family Suite" image="https://images.unsplash.com/photo-1566665797739-1674de7a421a?auto=format&fit=crop&w=1200&q=85" text="A flexible room setup for families and small groups." /></div></section></>; }
+function RoomDetail({ title, image, text }) { return <article className="room-detail"><img src={image} alt={title} /><div><span className="eyebrow">SARENA HOTEL</span><h2>{title}</h2><p>{text}</p><ul><li><Check size={15} /> Comfortable bedding</li><li><Check size={15} /> Private bathroom</li><li><Check size={15} /> Wi-Fi access</li><li><Check size={15} /> Daily housekeeping</li></ul></div></article>; }
+
+function GalleryPage() { const images = ['https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1000&q=80','https://images.unsplash.com/photo-1611892440504-42a792e24d32?auto=format&fit=crop&w=1000&q=80','https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80','https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1000&q=80','https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=1000&q=80','https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1000&q=80']; return <><InnerHero eyebrow="GALLERY" title={<>A glimpse of <em>Sarena.</em></>} text="Explore the spaces, details, and atmosphere that shape the guest experience." /><section className="section"><div className="container gallery-grid">{images.map((src, i) => <img key={src} src={src} alt={`Sarena Hotel gallery ${i + 1}`} />)}</div></section></>; }
+
+function ContactPage() { const [submitted, setSubmitted] = useState(false); return <><InnerHero eyebrow="CONTACT" title={<>We are here to <em>help.</em></>} text="For reservations, questions, or special requests, contact the Sarena Hotel team." /><section className="section"><div className="container contact-grid"><div><span className="eyebrow">GET IN TOUCH</span><h2>Let’s make your stay <em>simple.</em></h2><p className="lead">Send an enquiry and our team can help with your stay, rooms, services, or special arrangements.</p><div className="contact-details"><div><MapPin /><span><strong>Address</strong>Gilgit-Baltistan, Pakistan</span></div><div><Phone /><span><strong>Phone</strong>+92 300 0000000</span></div><div><Mail /><span><strong>Email</strong>stay@sarenahotel.com</span></div></div></div>{!submitted ? <form className="contact-form" onSubmit={e => { e.preventDefault(); setSubmitted(true); }}><label>Name<input required placeholder="Your name" /></label><label>Email<input required type="email" placeholder="you@example.com" /></label><label>Phone<input placeholder="+92 ..." /></label><label>Subject<input required placeholder="How can we help?" /></label><label className="full">Message<textarea required rows="6" placeholder="Write your message..."></textarea></label><button className="primary-button full" type="submit">Send enquiry <ArrowRight size={17} /></button></form> : <SuccessMessage title="Enquiry received" text="Thank you. Your message has been submitted and is ready for hotel confirmation." />}</div></section><section className="map-section"><div className="container map-card"><MapPin /><div><span className="eyebrow">FIND US</span><h3>Gilgit-Baltistan, Pakistan</h3><p>Replace this map embed with the hotel's exact Google Maps location when the final address is confirmed.</p></div></div></section></>; }
+
+function App() { const [path, setPath] = useState(window.location.pathname); const [booking, setBooking] = useState(false); useEffect(() => { const handler = () => setPath(window.location.pathname); window.addEventListener('popstate', handler); return () => window.removeEventListener('popstate', handler); }, []); useEffect(() => { const titles = { '/': 'Sarena Hotel | Gilgit-Baltistan', '/about': 'About | Sarena Hotel', '/services': 'Services | Sarena Hotel', '/rooms': 'Rooms | Sarena Hotel', '/gallery': 'Gallery | Sarena Hotel', '/contact': 'Contact | Sarena Hotel' }; document.title = titles[path] || titles['/']; }, [path]); let page = <Home onBook={() => setBooking(true)} />; if (path === '/about') page = <AboutPage />; if (path === '/services') page = <ServicesPage />; if (path === '/rooms') page = <RoomsPage />; if (path === '/gallery') page = <GalleryPage />; if (path === '/contact') page = <ContactPage />; return <><Header onBook={() => setBooking(true)} /><main>{page}</main><Footer />{booking && <BookingModal close={() => setBooking(false)} />}</>; }
+
+export default App;
