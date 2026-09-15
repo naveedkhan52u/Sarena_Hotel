@@ -1,3 +1,5 @@
+import { supabase } from './supabaseClient';
+
 const SUPABASE_URL = 'https://qzlrngbedxmsfwlgbihi.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_RTtM9IAPi6e_jjJKiR8X8g_3n3S7XJN';
 
@@ -30,8 +32,6 @@ async function submitBooking(form) {
   if (!rooms?.length) throw new Error('The selected room is not available yet.');
 
   const room = rooms[0];
-  const checkIn = field(form, 'input[type="date"]:nth-of-type(1)');
-  const checkOut = field(form, 'input[type="date"]:nth-of-type(2)');
   const dateInputs = [...form.querySelectorAll('input[type="date"]')];
   const checkInDate = dateInputs[0]?.value || '';
   const checkOutDate = dateInputs[1]?.value || '';
@@ -61,16 +61,20 @@ async function submitBooking(form) {
 }
 
 async function submitContact(form) {
-  return supabaseRequest('contact_messages', {
-    method: 'POST',
-    body: JSON.stringify({
+  const { data, error } = await supabase
+    .from('contact_messages')
+    .insert({
       name: field(form, 'input[placeholder="Your name"]'),
       email: field(form, 'input[type="email"]'),
       phone: field(form, 'input[placeholder="+92 ..."]'),
       subject: field(form, 'input[placeholder="How can we help?"]'),
       message: field(form, 'textarea'),
-    }),
-  });
+    })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message || 'Unable to submit your message.');
+  return data;
 }
 
 function showFormError(form, message) {
